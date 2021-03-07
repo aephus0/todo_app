@@ -1,9 +1,38 @@
 console.log("Nu flyger vi!")
 
+
+
 let totos = [];
 let listroot = document.querySelector("#list-root");
 let listform = document.querySelector("[data-list-form]");
-let listinput = document.querySelector("[data-list-input]");
+let listinput = document.querySelector("[data-list-header]");
+let listdesc = document.querySelector("[data-list-description]");
+const xhr = new XMLHttpRequest();
+const posturl = "https://dawapi.herokuapp.com/todo/item"
+
+function push(head, desc) {
+    totoadd = {
+        "id": "wiggo",
+        "header": head,
+        "description": desc,
+        "finished": "false"
+    }
+    xhr.open("POST", posturl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(JSON.stringify(totoadd))
+
+    fetch("https://dawapi.herokuapp.com/todo/list/wiggo")
+        .then(function (response) {
+        return response.json();
+        })
+        .then(function(myjson) {
+            console.log(myjson.data.items);
+            toto = myjson.data.items;
+            
+        })
+}
+    
+
 
 listform.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -11,9 +40,21 @@ listform.addEventListener("submit", (e) => {
     if (listinput.value.trim() === "") {
         return;
     }
-    totos.push(listinput.value.trim());
+    
+    totos.push({
+        "id": "wiggo",
+        "header": listinput.value.trim(),
+        "description": listdesc.value.trim(),
+        "finished": "false"
+    });
+    console.log(totos)
+    
+    push(listinput.value.trim(), listdesc.value.trim());
+    
+    
     updatelist();
-    listinput.value("");
+    listinput.value = "";
+    listdesc.value = "";
     
 });
 
@@ -36,19 +77,11 @@ function removeitem(event) {
 }
 
 function updatelist() {
-    
+
     listroot.innerHTML = "";
     listroot.append(totolist(totos));
+
 }
 
 updatelist();
 
-fetch("https://dawapi.herokuapp.com/todo/list/wiggo")
-        .then(function (response) {
-        return response.json();
-        })
-        .then(function(myjson) {
-            console.log(myjson.data.items);
-            toto = myjson.data.items;
-            
-        })
