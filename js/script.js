@@ -3,7 +3,7 @@ console.log("Nu flyger vi!")
 
 
 
-let totos = [{"id": "wiggo", "header": "Mysa", "description": "none", "finished": "false"}];
+let totos = [];
 let listroot = document.querySelector("#list-root");
 let listform = document.querySelector("[data-list-form]");
 let listinput = document.querySelector("[data-list-header]");
@@ -15,9 +15,7 @@ function push(head) {
     
     xhr.open("POST", posturl, true);
     xhr.setRequestHeader('Content-Type', 'application/json')
-    xhr.send(JSON.stringify(head))
-
-    
+    xhr.send(JSON.stringify(head))   
 }
 
 function unpush(header) {
@@ -41,15 +39,12 @@ function createtoto(header) {
 
 listform.addEventListener("submit", (e) => {
     e.preventDefault();
-    
     if (listinput.value.trim() === "") { 
         return;
     }
     totos.push(createtoto(listinput.value.trim()));
     console.log(totos)
-    
     push(createtoto(listinput.value.trim()));
-    
     updatelist();
     listinput.value = "";
     
@@ -78,16 +73,15 @@ function removeitem(event) {
 }
 
 function updatelist() {
-
     listroot.innerHTML = "";
     listroot.append(totolist(totos));
-
     fetch("https://dawapi.herokuapp.com/todo/list/wiggo")
         .then(function (response) {
         return response.json();
         })
         .then(function(myjson) {
             console.log(myjson.data.items);
+            
         })
 
 }
