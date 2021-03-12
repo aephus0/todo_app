@@ -8,23 +8,36 @@ let listroot = document.querySelector("#list-root");
 let listform = document.querySelector("[data-list-form]");
 let listinput = document.querySelector("[data-list-header]");
 let listdesc = document.querySelector("[data-list-description]");
-const xhr = new XMLHttpRequest();
 const posturl = "https://dawapi.herokuapp.com/todo/item"
 
 function push(head) {
-    
-    xhr.open("POST", posturl, true);
-    xhr.setRequestHeader('Content-Type', 'application/json')
-    xhr.send(JSON.stringify(head))   
+    fetch(posturl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'
+        
+        },
+        body: JSON.stringify(head)
+    })
+     
 }
 
 function unpush(header) {
-    xhr.open("DELETE", posturl, true);
-    xhr.setRequestHeader('Content-Type', 'application/json')
-    xhr.send(JSON.stringify({
-        "id": "wiggo",
-        "header": header
-    }))
+    fetch(posturl, {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'
+        
+        },
+        body: JSON.stringify(
+            {
+            "id": "wiggo",
+            "header": header
+            })
+        
+    })
+    
+    
+    
+    
 }
 
 function createtoto(header) {
